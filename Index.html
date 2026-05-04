@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Studio Planner">
+<meta name="theme-color" content="#f5c800">
+<title>Studio Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Studio Planner">
+<meta name="theme-color" content="#f5c800">
+<title>Studio Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --yellow:     #f5c800;
+  --yellow-mid: #e0b800;
+  --yellow-dk:  #b08f00;
+  --yellow-bg:  #fffbe6;
+  --neon-green: #c8ff00;
+  --neon-pink:  #ff3fa4;
+  --neon-blue:  #00c8ff;
+  --black:      #0d0d0d;
+  --off-black:  #1a1a1a;
+  --charcoal:   #2e2e2e;
+  --mid:        #666;
+  --light:      #999;
+  --border:     rgba(0,0,0,0.1);
+  --border2:    rgba(0,0,0,0.18);
+  --white:      #ffffff;
+  --off-white:  #f9f7f2;
+  --cream:      #f2efe6;
+  --burn:       #ff3f1a;
+  --burn-bg:    rgba(255,63,26,0.08);
+  --strength:   #ff3fa4;
+  --strength-bg:rgba(255,63,164,0.08);
+  --boxing:     #00aaff;
+  --boxing-bg:  rgba(0,170,255,0.08);
+  --radius:     16px;
+  --radius-sm:  10px;
+  --sans:       "DM Sans", sans-serif;
+  --display:    "Barlow Condensed", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; background: var(--off-white); color: var(--black); font-family: var(--sans); font-size: 15px; line-height: 1.5; overflow: hidden; }
+
+/* ── App shell ── */
+#app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
+
+/* ── Header ── */
+#header { background: var(--black); padding: 14px 20px 12px; flex-shrink: 0; position: relative; overflow: hidden; }
+#header::after { content: ""; position: absolute; right: -10px; top: -10px; width: 80px; height: 80px; background: var(--yellow); border-radius: 50%; opacity: 0.15; }
+#header-top { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+.app-wordmark { font-family: var(--display); font-size: 28px; font-weight: 900; color: var(--yellow); letter-spacing: 1px; text-transform: uppercase; line-height: 1; }
+.app-wordmark span { color: var(--white); }
+.app-sub { font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+#header-badge { font-family: var(--display); font-size: 13px; font-weight: 700; padding: 5px 14px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* ── Content ── */
+#content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--off-white); }
+
+/* ── Nav ── */
+#nav { display: flex; background: var(--black); flex-shrink: 0; border-top: 2px solid var(--yellow); }
+.nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 4px 14px; border: none; background: none; color: rgba(255,255,255,0.3); font-family: var(--sans); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase; font-weight: 500; cursor: pointer; transition: color .2s; position: relative; }
+.nav-btn.active { color: var(--yellow); }
+.nav-btn.active::before { content: ""; position: absolute; top: -2px; left: 50%; transform: translateX(-50%); width: 32px; height: 2px; background: var(--yellow); }
+.nav-icon { width: 22px; height: 22px; }
+
+/* ── Panels ── */
+.panel { display: none; padding: 20px; }
+.panel.active { display: block; }
+
+/* ── Section labels ── */
+.sec-label { font-family: var(--display); font-size: 13px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--light); margin-bottom: 12px; }
+
+/* ── Hero strip ── */
+.class-hero { background: var(--black); border-radius: var(--radius); margin-bottom: 16px; padding: 16px; display: flex; align-items: center; justify-content: space-between; overflow: hidden; position: relative; }
+.class-hero::before { content: ""; position: absolute; right: -20px; top: -20px; width: 100px; height: 100px; border-radius: 50%; opacity: 0.12; }
+.class-hero.hero-burn::before { background: var(--burn); }
+.class-hero.hero-strength::before { background: var(--strength); }
+.class-hero.hero-boxing::before { background: var(--boxing); }
+.hero-title { font-family: var(--display); font-size: 32px; font-weight: 900; text-transform: uppercase; line-height: 1; color: var(--white); }
+.hero-dot { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── Class tabs ── */
+.class-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 20px; }
+.class-tab { padding: 11px 6px; border: 2px solid transparent; border-radius: var(--radius-sm); background: var(--white); font-family: var(--display); font-size: 13px; font-weight: 800; color: var(--light); cursor: pointer; text-align: center; transition: all .2s; text-transform: uppercase; letter-spacing: 0.5px; }
+.class-tab.active-burn { border-color: var(--burn); background: var(--burn-bg); color: var(--burn); }
+.class-tab.active-strength { border-color: var(--strength); background: var(--strength-bg); color: var(--strength); }
+.class-tab.active-boxing { border-color: var(--boxing); background: var(--boxing-bg); color: var(--boxing); }
+
+/* ── Sequence accordion ── */
+.seq-block { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; }
+.seq-head { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; user-select: none; transition: background .15s; }
+.seq-head:active { background: var(--cream); }
+.seq-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.seq-info { flex: 1; min-width: 0; }
+.seq-name { font-family: var(--display); font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; color: var(--black); }
+.seq-pips { display: flex; gap: 3px; margin-top: 5px; }
+.seq-pip { height: 3px; border-radius: 2px; flex: 1; background: var(--cream); transition: background .2s; }
+.seq-count { font-size: 11px; font-weight: 600; color: var(--light); flex-shrink: 0; }
+.seq-chevron { width: 18px; height: 18px; color: var(--light); transition: transform .2s; flex-shrink: 0; }
+.seq-chevron.open { transform: rotate(90deg); }
+.seq-body { display: none; border-top: 1.5px solid var(--border); }
+.seq-body.open { display: block; }
+
+.move-row { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.move-row:last-child { border-bottom: none; }
+.move-info { flex: 1; min-width: 0; }
+.move-name { font-size: 13px; font-weight: 600; color: var(--black); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.move-muscle { font-size: 11px; color: var(--light); margin-top: 1px; }
+.move-dur { font-size: 11px; font-weight: 600; color: var(--mid); flex-shrink: 0; }
+.add-move-btn { padding: 6px 14px; border-radius: 20px; border: 2px solid var(--border2); background: none; font-family: var(--sans); font-size: 11px; font-weight: 700; color: var(--mid); cursor: pointer; transition: all .15s; flex-shrink: 0; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.3px; }
+.add-move-btn.added { background: var(--yellow); border-color: var(--yellow); color: var(--black); }
+
+/* ── Session panel ── */
+.session-name-input { width: 100%; background: var(--white); border: 2px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; font-family: var(--sans); font-size: 14px; font-weight: 500; color: var(--black); margin-bottom: 16px; transition: border-color .15s; }
+.session-name-input:focus { outline: none; border-color: var(--yellow); }
+.session-name-input::placeholder { color: var(--light); }
+
+.stats-bar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+.stat-card { background: var(--black); border-radius: var(--radius-sm); padding: 14px 10px; text-align: center; position: relative; overflow: hidden; }
+.stat-card::after { content: ""; position: absolute; right: -8px; bottom: -8px; width: 40px; height: 40px; border-radius: 50%; background: var(--yellow); opacity: 0.15; }
+.stat-val { font-family: var(--display); font-size: 34px; font-weight: 900; color: var(--yellow); line-height: 1; }
+.stat-lbl { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.5); margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
+
+.coverage-row { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 18px; }
+.cov-pill { font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px; border: 2px solid var(--border); color: var(--light); background: var(--white); transition: all .2s; text-transform: uppercase; letter-spacing: 0.3px; }
+.cov-pill.covered { border-width: 2px; color: var(--black); background: var(--yellow); border-color: var(--yellow); }
+
+.session-group { margin-bottom: 14px; }
+.session-group-label { font-family: var(--display); font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.session-group-dot { width: 7px; height: 7px; border-radius: 50%; }
+.session-slot { display: flex; align-items: center; gap: 10px; background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 4px; }
+.slot-name { flex: 1; font-size: 13px; font-weight: 600; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--black); }
+.slot-dur { font-size: 11px; font-weight: 600; color: var(--light); flex-shrink: 0; }
+.slot-rm { width: 24px; height: 24px; border-radius: 50%; background: var(--cream); border: none; color: var(--mid); font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: var(--sans); transition: all .15s; }
+.slot-rm:active { background: var(--burn-bg); color: var(--burn); }
+
+.tip-card { border-left: 4px solid; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 10px 12px; margin-bottom: 8px; }
+.tip-card.tip-ok { background: rgba(200,255,0,0.1); border-left-color: var(--neon-green); }
+.tip-card.tip-warn { background: rgba(255,200,0,0.1); border-left-color: var(--yellow); }
+.tip-card.tip-info { background: rgba(0,200,255,0.1); border-left-color: var(--neon-blue); }
+.tip-label { font-family: var(--display); font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
+.tip-card.tip-ok .tip-label { color: #557700; }
+.tip-card.tip-warn .tip-label { color: var(--yellow-dk); }
+.tip-card.tip-info .tip-label { color: #0066aa; }
+.tip-text { font-size: 12px; color: var(--mid); line-height: 1.5; }
+
+.empty-state { text-align: center; padding: 52px 20px; }
+.empty-icon { width: 44px; height: 44px; margin: 0 auto 14px; opacity: 0.2; }
+.empty-text { font-family: var(--display); font-size: 20px; font-weight: 800; text-transform: uppercase; color: var(--mid); letter-spacing: 0.5px; }
+.empty-sub { font-size: 12px; color: var(--light); margin-top: 6px; }
+
+.action-row { display: flex; gap: 8px; margin-top: 20px; padding-bottom: 20px; }
+.btn-primary { flex: 1; background: var(--yellow); color: var(--black); border: none; border-radius: var(--radius-sm); padding: 15px; font-family: var(--display); font-size: 16px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: all .15s; }
+.btn-primary:active { background: var(--yellow-mid); transform: scale(0.98); }
+.btn-secondary { background: var(--white); color: var(--mid); border: 2px solid var(--border2); border-radius: var(--radius-sm); padding: 15px 16px; font-family: var(--sans); font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; }
+.btn-secondary:active { border-color: var(--black); color: var(--black); }
+
+/* ── Library ── */
+.add-move-form { background: var(--black); border-radius: var(--radius); padding: 18px; margin-bottom: 20px; }
+.form-title { font-family: var(--display); font-size: 18px; font-weight: 900; color: var(--yellow); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.form-row.full { grid-template-columns: 1fr; }
+.form-input { width: 100%; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); border-radius: var(--radius-sm); padding: 10px 12px; font-family: var(--sans); font-size: 13px; color: var(--white); transition: border-color .15s; }
+.form-input::placeholder { color: rgba(255,255,255,0.3); }
+.form-input:focus { outline: none; border-color: var(--yellow); }
+.form-select { width: 100%; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.15); border-radius: var(--radius-sm); padding: 10px 12px; font-family: var(--sans); font-size: 13px; color: var(--white); appearance: none; }
+.form-select:focus { outline: none; border-color: var(--yellow); }
+.form-select option { background: var(--off-black); color: var(--white); }
+.form-btn { width: 100%; background: var(--yellow); border: none; border-radius: var(--radius-sm); padding: 13px; font-family: var(--display); font-size: 16px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; color: var(--black); cursor: pointer; margin-top: 6px; transition: all .15s; }
+.form-btn:active { background: var(--yellow-mid); }
+
+/* ── Catalogue ── */
+.cat-item { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; }
+.cat-title { font-family: var(--display); font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 6px; color: var(--black); }
+.cat-meta { font-size: 12px; color: var(--light); margin-bottom: 8px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.cat-type { font-family: var(--display); font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.3px; }
+.type-burn { background: var(--burn-bg); color: var(--burn); }
+.type-strength { background: var(--strength-bg); color: var(--strength); }
+.type-boxing { background: var(--boxing-bg); color: var(--boxing); }
+.cat-seqs { display: flex; gap: 4px; flex-wrap: wrap; }
+.cat-seq-tag { font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 20px; background: var(--cream); color: var(--mid); border: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.2px; }
+
+/* ── Insights ── */
+.insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.insight-card { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; }
+.insight-card.yellow { background: var(--yellow); border-color: var(--yellow-mid); }
+.insight-card.black { background: var(--black); border-color: var(--black); }
+.insight-title { font-family: var(--display); font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; color: var(--light); }
+.insight-card.yellow .insight-title { color: var(--yellow-dk); }
+.insight-card.black .insight-title { color: rgba(255,255,255,0.4); }
+.insight-val { font-family: var(--display); font-size: 36px; font-weight: 900; color: var(--black); line-height: 1; margin-bottom: 2px; }
+.insight-card.yellow .insight-val { color: var(--black); }
+.insight-card.black .insight-val { color: var(--yellow); }
+.insight-sub { font-size: 11px; font-weight: 600; color: var(--mid); }
+.insight-card.yellow .insight-sub { color: var(--yellow-dk); }
+.insight-card.black .insight-sub { color: rgba(255,255,255,0.5); }
+.insight-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--mid); }
+.insight-row:last-child { border-bottom: none; }
+.insight-row-val { font-weight: 700; color: var(--black); }
+
+/* ── Toast ── */
+#toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--black); color: var(--yellow); padding: 10px 22px; border-radius: 20px; font-family: var(--display); font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0; transition: all .3s; pointer-events: none; white-space: nowrap; z-index: 100; border: 2px solid var(--yellow); }
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media print {
+  #nav, #header, .action-row, .add-move-btn, .slot-rm { display: none !important; }
+  body { background: white; color: black; overflow: auto; }
+  #content { overflow: visible; }
+  .panel { display: block !important; padding: 0; }
+  #panel-session { display: block !important; }
+  .stats-bar, .coverage-row, #session-tips { display: none; }
+}
+</style>
+<body>
+<div id="app">
+  <div id="header">
+    <div id="header-top">
+      <div>
+        <div class="app-wordmark">Studio<span>Plan</span></div>
+        <div class="app-sub">Hot Room Pilates</div>
+      </div>
+      <div id="header-badge">Mat Burn</div>
+    </div>
+  </div>
+
+  <div id="content">
+
+    <!-- BUILD -->
+    <div id="panel-build" class="panel active">
+      <div class="class-tabs">
+        <button class="class-tab active-burn" onclick="setClass('burn',this)">Mat Burn</button>
+        <button class="class-tab" onclick="setClass('strength',this)">Strength</button>
+        <button class="class-tab" onclick="setClass('boxing',this)">Box</button>
+      </div>
+      <div class="sec-label">Sequences</div>
+      <div id="seq-list"></div>
+    </div>
+
+    <!-- SESSION -->
+    <div id="panel-session" class="panel">
+      <input class="session-name-input" id="session-name" type="text" placeholder="Name this session..." maxlength="60">
+      <div class="stats-bar">
+        <div class="stat-card"><div class="stat-val" id="stat-dur">0</div><div class="stat-lbl">Minutes</div></div>
+        <div class="stat-card"><div class="stat-val" id="stat-moves">0</div><div class="stat-lbl">Moves</div></div>
+        <div class="stat-card"><div class="stat-val" id="stat-seqs">0</div><div class="stat-lbl">Sequences</div></div>
+      </div>
+      <div class="sec-label">Coverage</div>
+      <div class="coverage-row" id="coverage-row"></div>
+      <div class="sec-label">Moves</div>
+      <div id="session-slots"></div>
+      <div id="session-tips" style="margin-top:16px;"></div>
+      <div class="action-row">
+        <button class="btn-primary" onclick="saveSession()">Save</button>
+        <button class="btn-secondary" onclick="printSession()">Print</button>
+        <button class="btn-secondary" onclick="clearSession()" style="padding:15px 12px;">Clear</button>
+      </div>
+    </div>
+
+    <!-- LIBRARY -->
+    <div id="panel-library" class="panel">
+      <div class="add-move-form">
+        <div class="form-title">Add a move</div>
+        <div class="form-row full">
+          <input class="form-input" id="fm-name" type="text" placeholder="Move name">
+        </div>
+        <div class="form-row">
+          <select class="form-select" id="fm-class" onchange="populateSeqSel()">
+            <option value="burn">Mat Burn</option>
+            <option value="strength">Pilates Strength</option>
+            <option value="boxing">Box Strength</option>
+          </select>
+          <select class="form-select" id="fm-seq"></select>
+        </div>
+        <div class="form-row">
+          <input class="form-input" id="fm-muscles" type="text" placeholder="Muscles">
+          <input class="form-input" id="fm-dur" type="number" placeholder="Mins" min="1" max="20">
+        </div>
+        <div class="form-row full">
+          <select class="form-select" id="fm-intensity">
+            <option value="low">Low intensity</option>
+            <option value="medium" selected>Medium intensity</option>
+            <option value="high">High intensity</option>
+          </select>
+        </div>
+        <button class="form-btn" onclick="addCustomMove()">Add to Library</button>
+      </div>
+      <div class="class-tabs" style="margin-bottom:16px;">
+        <button class="class-tab active-burn" onclick="setLibFilter('burn',this)">Mat Burn</button>
+        <button class="class-tab" onclick="setLibFilter('strength',this)">Strength</button>
+        <button class="class-tab" onclick="setLibFilter('boxing',this)">Box</button>
+      </div>
+      <div id="lib-list"></div>
+    </div>
+
+    <!-- CATALOGUE -->
+    <div id="panel-catalogue" class="panel">
+      <div class="sec-label">Insights</div>
+      <div id="insights-section"></div>
+      <div class="sec-label">Sessions</div>
+      <div id="cat-list"></div>
+    </div>
+
+  </div>
+
+  <nav id="nav">
+    <button class="nav-btn active" onclick="showPanel('build',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      Build
+    </button>
+    <button class="nav-btn" onclick="showPanel('session',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+      Session
+    </button>
+    <button class="nav-btn" onclick="showPanel('library',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+      Library
+    </button>
+    <button class="nav-btn" onclick="showPanel('catalogue',this)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Catalogue
+    </button>
+  </nav>
+</div>
+<div id="toast"></div>
+
+<script>
+const CLASS_SEQS = {
+  burn: [
+    {id:"b-core",   key:"core",      label:"Core Sequence",         color:"#4a9eff"},
+    {id:"b-plank",  key:"plank",     label:"Plank Sequence",        color:"#ff3f1a"},
+    {id:"b-four",   key:"fourpoint", label:"Four-Point Kneeling",   color:"#c8ff00"},
+    {id:"b-side",   key:"sidelying", label:"Side Lying",            color:"#ff3fa4"},
+    {id:"b-stand",  key:"standing",  label:"Standing",              color:"#f5c800"},
+    {id:"b-upper",  key:"upperbody", label:"Upper Body",            color:"#00c8ff"},
+  ],
+  strength: [
+    {id:"s-corestr",key:"corestr",   label:"Core Strength",         color:"#4a9eff"},
+    {id:"s-hiit1",  key:"hiit1",     label:"HIIT Sequence",         color:"#ff3f1a"},
+    {id:"s-lower",  key:"lower",     label:"Lower Body Strength",   color:"#c8ff00"},
+    {id:"s-hiit2",  key:"hiit2",     label:"HIIT Sequence 2",       color:"#f5c800"},
+    {id:"s-upper",  key:"upper",     label:"Upper Body Strength",   color:"#ff3fa4"},
+  ],
+  boxing: [
+    {id:"bx-core",  key:"bxcore",   label:"Core Sequence",             color:"#4a9eff"},
+    {id:"bx-box1",  key:"boxing1",  label:"Boxing Sequence",           color:"#ff3f1a"},
+    {id:"bx-lower", key:"bxlower",  label:"Lower Body Strength",       color:"#c8ff00"},
+    {id:"bx-box2",  key:"boxing2",  label:"Boxing Sequence 2",         color:"#f5c800"},
+    {id:"bx-upper", key:"bxupper",  label:"Upper Body Strength",       color:"#ff3fa4"},
+    {id:"bx-full",  key:"fullbody", label:"Full Body Round",           color:"#00c8ff"},
+    {id:"bx-combo", key:"strbox",   label:"Strength/Boxing",           color:"#c8ff00"},
+  ],
+};
+
+const DEFAULT_MOVES = {
+  burn:{
+    "b-core":[
+      {id:1001,name:"Hundred",duration:3,muscles:"Abdominals, core",intensity:"medium"},
+      {id:1002,name:"Roll-up",duration:2,muscles:"Core, spine",intensity:"medium"},
+      {id:1003,name:"Single leg stretch",duration:3,muscles:"Core, hip flexors",intensity:"medium"},
+      {id:1004,name:"Double leg stretch",duration:3,muscles:"Core, shoulders",intensity:"high"},
+      {id:1005,name:"Criss-cross",duration:3,muscles:"Obliques, core",intensity:"high"},
+    ],
+    "b-plank":[
+      {id:1101,name:"Forearm plank hold",duration:2,muscles:"Core, shoulders",intensity:"medium"},
+      {id:1102,name:"Plank shoulder taps",duration:3,muscles:"Core, arms",intensity:"high"},
+      {id:1103,name:"Plank hip dips",duration:3,muscles:"Obliques, core",intensity:"high"},
+      {id:1104,name:"Pike to plank",duration:3,muscles:"Core, shoulders",intensity:"high"},
+      {id:1105,name:"Plank leg lifts",duration:3,muscles:"Glutes, core",intensity:"medium"},
+    ],
+    "b-four":[
+      {id:1201,name:"Bird dog",duration:3,muscles:"Core, glutes, back",intensity:"medium"},
+      {id:1202,name:"Donkey kicks",duration:3,muscles:"Glutes, hamstrings",intensity:"medium"},
+      {id:1203,name:"Fire hydrant",duration:3,muscles:"Glutes, outer hip",intensity:"medium"},
+      {id:1204,name:"Cat-cow stretch",duration:2,muscles:"Spine, core",intensity:"low"},
+      {id:1205,name:"Thread the needle",duration:2,muscles:"Spine, obliques",intensity:"low"},
+    ],
+    "b-side":[
+      {id:1301,name:"Side leg lift",duration:3,muscles:"Outer thigh, glutes",intensity:"medium"},
+      {id:1302,name:"Side kick series",duration:4,muscles:"Outer thigh, hip flexors",intensity:"medium"},
+      {id:1303,name:"Inner thigh lift",duration:3,muscles:"Inner thigh, adductors",intensity:"low"},
+      {id:1304,name:"Clamshell",duration:3,muscles:"Glutes, outer hip",intensity:"low"},
+      {id:1305,name:"Side plank dip",duration:3,muscles:"Obliques, shoulders",intensity:"high"},
+    ],
+    "b-stand":[
+      {id:1401,name:"Pilates squat",duration:3,muscles:"Quads, glutes",intensity:"medium"},
+      {id:1402,name:"Standing balance",duration:2,muscles:"Core, ankles",intensity:"low"},
+      {id:1403,name:"Plie series",duration:3,muscles:"Inner thigh, glutes",intensity:"medium"},
+      {id:1404,name:"Standing leg circles",duration:3,muscles:"Hips, glutes",intensity:"medium"},
+      {id:1405,name:"Releve pulses",duration:2,muscles:"Calves, ankles",intensity:"low"},
+    ],
+    "b-upper":[
+      {id:1501,name:"Arm circles",duration:2,muscles:"Shoulders, arms",intensity:"low"},
+      {id:1502,name:"Pilates push-up",duration:3,muscles:"Chest, arms, core",intensity:"medium"},
+      {id:1503,name:"Tricep dips",duration:3,muscles:"Triceps, arms",intensity:"medium"},
+      {id:1504,name:"Lat pulldown (band)",duration:3,muscles:"Back, arms",intensity:"medium"},
+      {id:1505,name:"Chest expansion",duration:2,muscles:"Chest, shoulders",intensity:"low"},
+    ],
+  },
+  strength:{
+    "s-corestr":[
+      {id:2001,name:"Teaser",duration:3,muscles:"Core, hip flexors",intensity:"high"},
+      {id:2002,name:"Jackknife",duration:3,muscles:"Core, back",intensity:"high"},
+      {id:2003,name:"Open leg rocker",duration:3,muscles:"Core, hamstrings",intensity:"medium"},
+      {id:2004,name:"Hollow body hold",duration:2,muscles:"Core, abdominals",intensity:"high"},
+      {id:2005,name:"Dead bug",duration:3,muscles:"Core, coordination",intensity:"medium"},
+    ],
+    "s-hiit1":[
+      {id:2101,name:"Burpees",duration:3,muscles:"Full body, cardio",intensity:"high"},
+      {id:2102,name:"Jump squats",duration:3,muscles:"Quads, glutes, cardio",intensity:"high"},
+      {id:2103,name:"Mountain climbers",duration:3,muscles:"Core, cardio",intensity:"high"},
+      {id:2104,name:"High knees",duration:2,muscles:"Hip flexors, cardio",intensity:"high"},
+      {id:2105,name:"Plank jacks",duration:3,muscles:"Core, cardio",intensity:"high"},
+    ],
+    "s-lower":[
+      {id:2201,name:"Single leg deadlift",duration:3,muscles:"Hamstrings, glutes",intensity:"medium"},
+      {id:2202,name:"Curtsy lunge",duration:3,muscles:"Glutes, quads",intensity:"medium"},
+      {id:2203,name:"Sumo squat hold",duration:3,muscles:"Inner thigh, glutes",intensity:"medium"},
+      {id:2204,name:"Bridge with pulse",duration:3,muscles:"Glutes, hamstrings",intensity:"medium"},
+      {id:2205,name:"Side-lying leg series",duration:4,muscles:"Outer thigh, glutes",intensity:"medium"},
+    ],
+    "s-hiit2":[
+      {id:2301,name:"Lateral bounds",duration:3,muscles:"Legs, cardio",intensity:"high"},
+      {id:2302,name:"Tuck jumps",duration:2,muscles:"Quads, core, cardio",intensity:"high"},
+      {id:2303,name:"Speed skaters",duration:3,muscles:"Glutes, legs, cardio",intensity:"high"},
+      {id:2304,name:"Squat thrusts",duration:3,muscles:"Full body, cardio",intensity:"high"},
+      {id:2305,name:"Box step explosive",duration:3,muscles:"Quads, glutes, cardio",intensity:"high"},
+    ],
+    "s-upper":[
+      {id:2401,name:"Renegade row",duration:3,muscles:"Back, arms, core",intensity:"high"},
+      {id:2402,name:"Chest press (band)",duration:3,muscles:"Chest, shoulders",intensity:"medium"},
+      {id:2403,name:"Bicep curl to press",duration:3,muscles:"Biceps, shoulders",intensity:"medium"},
+      {id:2404,name:"Tricep extension",duration:3,muscles:"Triceps, arms",intensity:"medium"},
+      {id:2405,name:"Reverse fly",duration:3,muscles:"Upper back, shoulders",intensity:"medium"},
+    ],
+  },
+  boxing:{
+    "bx-core":[
+      {id:3001,name:"V-sit hold",duration:2,muscles:"Core, hip flexors",intensity:"high"},
+      {id:3002,name:"Plank punch-outs",duration:3,muscles:"Core, shoulders",intensity:"high"},
+      {id:3003,name:"Hollow body rocks",duration:3,muscles:"Core, abdominals",intensity:"high"},
+      {id:3004,name:"Russian twist",duration:3,muscles:"Obliques, core",intensity:"medium"},
+      {id:3005,name:"Dead bug with reach",duration:3,muscles:"Core, coordination",intensity:"medium"},
+    ],
+    "bx-box1":[
+      {id:3101,name:"Jab-cross combo",duration:4,muscles:"Shoulders, core, cardio",intensity:"high"},
+      {id:3102,name:"Hook series",duration:3,muscles:"Arms, obliques",intensity:"high"},
+      {id:3103,name:"Uppercut drill",duration:3,muscles:"Arms, core",intensity:"high"},
+      {id:3104,name:"Slip and punch",duration:3,muscles:"Core, arms, cardio",intensity:"high"},
+      {id:3105,name:"Speed bag drill",duration:3,muscles:"Shoulders, arms",intensity:"high"},
+    ],
+    "bx-lower":[
+      {id:3201,name:"Squat to kick",duration:3,muscles:"Quads, glutes, core",intensity:"high"},
+      {id:3202,name:"Lunge with hooks",duration:4,muscles:"Glutes, legs, arms",intensity:"high"},
+      {id:3203,name:"Squat pulse jabs",duration:3,muscles:"Quads, glutes, arms",intensity:"high"},
+      {id:3204,name:"Lateral shuffle jab",duration:3,muscles:"Legs, cardio, arms",intensity:"high"},
+      {id:3205,name:"Sumo squat uppercut",duration:3,muscles:"Inner thigh, glutes, arms",intensity:"high"},
+    ],
+    "bx-box2":[
+      {id:3301,name:"Combination 1-2-3-4",duration:4,muscles:"Full body, cardio",intensity:"high"},
+      {id:3302,name:"Body shot drill",duration:3,muscles:"Obliques, arms, core",intensity:"high"},
+      {id:3303,name:"Defensive weave punch",duration:3,muscles:"Legs, core, arms",intensity:"high"},
+      {id:3304,name:"Jab-cross-slip combo",duration:4,muscles:"Full body, coordination",intensity:"high"},
+      {id:3305,name:"Freestyle round",duration:3,muscles:"Full body, cardio",intensity:"high"},
+    ],
+    "bx-upper":[
+      {id:3401,name:"Boxer push-up",duration:3,muscles:"Chest, arms, core",intensity:"high"},
+      {id:3402,name:"Shoulder press jab",duration:3,muscles:"Shoulders, arms",intensity:"medium"},
+      {id:3403,name:"Tricep extension combo",duration:3,muscles:"Triceps, shoulders",intensity:"medium"},
+      {id:3404,name:"Renegade row",duration:3,muscles:"Back, arms, core",intensity:"high"},
+      {id:3405,name:"Cool-down arm stretch",duration:2,muscles:"Shoulders, chest",intensity:"low"},
+    ],
+    "bx-full":[
+      {id:3501,name:"Burpee to punch",duration:3,muscles:"Full body, cardio",intensity:"high"},
+      {id:3502,name:"Jump squat to hook",duration:3,muscles:"Legs, glutes, arms",intensity:"high"},
+      {id:3503,name:"Mountain climber punches",duration:3,muscles:"Core, arms, cardio",intensity:"high"},
+      {id:3504,name:"Bear crawl to jab",duration:3,muscles:"Core, shoulders, arms",intensity:"high"},
+      {id:3505,name:"Full body power round",duration:4,muscles:"Full body, cardio",intensity:"high"},
+    ],
+    "bx-combo":[
+      {id:3601,name:"Strength jab series",duration:4,muscles:"Arms, core, chest",intensity:"high"},
+      {id:3602,name:"Deadlift to uppercut",duration:3,muscles:"Hamstrings, glutes, arms",intensity:"high"},
+      {id:3603,name:"Press to cross",duration:3,muscles:"Shoulders, arms, core",intensity:"high"},
+      {id:3604,name:"Row to hook",duration:3,muscles:"Back, arms",intensity:"high"},
+      {id:3605,name:"Squat to boxing round",duration:4,muscles:"Full body, cardio",intensity:"high"},
+    ],
+  },
+};
+
+let library = JSON.parse(localStorage.getItem("sp_lib_v1")||"null")||JSON.parse(JSON.stringify(DEFAULT_MOVES));
+let catalogue = JSON.parse(localStorage.getItem("sp_cat_v1")||"[]");
+let session = [];
+let classFilter = "burn";
+let libFilter = "burn";
+let openSeqs = {};
+let openLibSeqs = {};
+
+function saveLib(){ localStorage.setItem("sp_lib_v1",JSON.stringify(library)); }
+function saveCat(){ localStorage.setItem("sp_cat_v1",JSON.stringify(catalogue)); }
+
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),2200);
+}
+
+function showPanel(name,btn){
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("panel-"+name).classList.add("active");
+  btn.classList.add("active");
+  if(name==="catalogue") renderCatalogue();
+  if(name==="library"){ populateSeqSel(); renderLibrary(); }
+  if(name==="session") renderSession();
+}
+
+function typeName(ct){ return ct==="burn"?"Mat Burn":ct==="strength"?"Pilates Strength":"Box Strength"; }
+function classColor(ct){ return ct==="burn"?"var(--burn)":ct==="strength"?"var(--strength)":"var(--boxing)"; }
+function classDim(ct){ return ct==="burn"?"var(--burn-bg)":ct==="strength"?"var(--strength-bg)":"var(--boxing-bg)"; }
+
+function setClass(ct,btn){
+  classFilter=ct;
+  document.querySelectorAll("#panel-build .class-tab").forEach(b=>b.className="class-tab");
+  btn.classList.add("active-"+ct);
+  const badge=document.getElementById("header-badge");
+  badge.textContent=typeName(ct);
+  badge.style.background=classDim(ct);
+  badge.style.color=classColor(ct);
+  badge.style.border="2px solid "+classColor(ct);
+  openSeqs={};
+  renderSeqList();
+}
+
+function setLibFilter(ct,btn){
+  libFilter=ct;
+  document.querySelectorAll("#panel-library .class-tab").forEach(b=>b.className="class-tab");
+  btn.classList.add("active-"+ct);
+  openLibSeqs={};
+  renderLibrary();
+}
+
+function renderSeqList(){
+  const seqs=CLASS_SEQS[classFilter];
+  document.getElementById("seq-list").innerHTML=seqs.map(seq=>{
+    const moves=library[classFilter][seq.id]||[];
+    const added=moves.filter(m=>session.find(s=>s.id===m.id)).length;
+    const isOpen=openSeqs[seq.id];
+    const pips=moves.map((_,i)=>`<div class="seq-pip" style="${i<added?"background:"+seq.color:""}"></div>`).join("");
+    return `<div class="seq-block">
+      <div class="seq-head" onclick="toggleSeq('${seq.id}')">
+        <div class="seq-dot" style="background:${seq.color}"></div>
+        <div class="seq-info">
+          <div class="seq-name">${seq.label}</div>
+          <div class="seq-pips">${pips}</div>
+        </div>
+        <div class="seq-count">${added}/${moves.length}</div>
+        <svg class="seq-chevron${isOpen?" open":""}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="seq-body${isOpen?" open":""}">
+        ${moves.length===0?`<div style="padding:16px;font-size:13px;color:var(--light);">No moves yet — add some in Library.</div>`:
+          moves.map(m=>{
+            const inSess=!!session.find(s=>s.id===m.id);
+            return `<div class="move-row">
+              <div class="move-info">
+                <div class="move-name">${m.name}</div>
+                <div class="move-muscle">${m.muscles}</div>
+              </div>
+              <div class="move-dur">${m.duration}m</div>
+              <button class="add-move-btn${inSess?" added":""}" onclick="toggleMove(${m.id},'${seq.id}','${classFilter}')">${inSess?"Added ✓":"+ Add"}</button>
+            </div>`;
+          }).join("")}
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function toggleSeq(id){ openSeqs[id]=!openSeqs[id]; renderSeqList(); }
+
+function toggleMove(moveId,seqId,ct){
+  const moves=library[ct][seqId]||[];
+  const move=moves.find(m=>m.id===moveId);
+  if(!move) return;
+  const seq=CLASS_SEQS[ct].find(s=>s.id===seqId);
+  const idx=session.findIndex(s=>s.id===moveId);
+  if(idx>-1) session.splice(idx,1);
+  else session.push({...move,seqId,seqLabel:seq.label,seqKey:seq.key,seqColor:seq.color,classType:ct});
+  renderSeqList();
+}
+
+function renderSession(){
+  const total=session.reduce((a,m)=>a+m.duration,0);
+  const seqKeys=new Set(session.map(m=>m.seqKey));
+  document.getElementById("stat-dur").textContent=total;
+  document.getElementById("stat-moves").textContent=session.length;
+  document.getElementById("stat-seqs").textContent=seqKeys.size;
+
+  const seqs=CLASS_SEQS[classFilter];
+  document.getElementById("coverage-row").innerHTML=seqs.map(s=>`<span class="cov-pill${seqKeys.has(s.key)?" covered":""}" style="${seqKeys.has(s.key)?"background:"+s.color+";border-color:"+s.color+";color:var(--black)":""}">${s.label.replace(" Sequence","").replace(" Kneeling","").replace("Four-Point","4pt").replace(" Strength","").replace("/Boxing","")}</span>`).join("");
+
+  const slotsEl=document.getElementById("session-slots");
+  if(session.length===0){
+    slotsEl.innerHTML=`<div class="empty-state">
+      <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div class="empty-text">No moves added</div>
+      <div class="empty-sub">Go to Build and tap moves to add them</div>
+    </div>`;
+  } else {
+    const bySeq={};const seqOrder=[];
+    session.forEach(m=>{ if(!bySeq[m.seqLabel]){bySeq[m.seqLabel]={color:m.seqColor,moves:[]};seqOrder.push(m.seqLabel);} bySeq[m.seqLabel].moves.push(m); });
+    slotsEl.innerHTML=seqOrder.map(label=>{
+      const {color,moves}=bySeq[label];
+      return `<div class="session-group">
+        <div class="session-group-label" style="color:${color}"><div class="session-group-dot" style="background:${color}"></div>${label}</div>
+        ${moves.map(m=>`<div class="session-slot">
+          <div class="slot-name">${m.name}</div>
+          <div class="slot-dur">${m.duration}m</div>
+          <button class="slot-rm" onclick="removeMove(${m.id})">×</button>
+        </div>`).join("")}
+      </div>`;
+    }).join("");
+  }
+  renderTips();
+}
+
+function removeMove(id){ session=session.filter(s=>s.id!==id); renderSession(); renderSeqList(); }
+
+function clearSession(){
+  if(!session.length) return;
+  session=[];
+  document.getElementById("session-name").value="";
+  renderSession(); renderSeqList();
+  toast("Session cleared");
+}
+
+function renderTips(){
+  const el=document.getElementById("session-tips");
+  if(session.length<2){el.innerHTML="";return;}
+  const tips=[];
+  const seqs=CLASS_SEQS[classFilter];
+  const coveredKeys=new Set(session.map(m=>m.seqKey));
+  const missing=seqs.filter(s=>!coveredKeys.has(s.key));
+  if(missing.length) tips.push({cls:"tip-warn",label:"Missing",text:"No moves yet from: "+missing.map(s=>s.label).join(", ")+"."});
+  if(session.filter(m=>m.intensity==="high").length>session.length*0.75) tips.push({cls:"tip-info",label:"Intensity",text:"Very high intensity throughout — a recovery move could help the flow."});
+  if(coveredKeys.size>=seqs.length) tips.push({cls:"tip-ok",label:"Full coverage",text:"All sequences represented — great balanced session!"});
+  if(!tips.length) tips.push({cls:"tip-ok",label:"Looking good",text:"Good mix so far. Keep building!"});
+  el.innerHTML=tips.map(t=>`<div class="tip-card ${t.cls}"><div class="tip-label">${t.label}</div><div class="tip-text">${t.text}</div></div>`).join("");
+}
+
+function saveSession(){
+  const name=document.getElementById("session-name").value.trim()||"Untitled Session";
+  if(!session.length){toast("Add some moves first!");return;}
+  const seqGroups={};
+  session.forEach(m=>{ if(!seqGroups[m.seqLabel])seqGroups[m.seqLabel]=[]; seqGroups[m.seqLabel].push(m); });
+  catalogue.unshift({id:Date.now(),name,type:classFilter,date:new Date().toLocaleDateString("en-AU",{day:"numeric",month:"short",year:"numeric"}),moves:[...session],seqGroups,duration:session.reduce((a,m)=>a+m.duration,0)});
+  saveCat();
+  toast("Session saved!");
+}
+
+function printSession(){
+  const name=document.getElementById("session-name").value.trim()||"Session";
+  const seqGroups={};const seqOrder=[];
+  session.forEach(m=>{ if(!seqGroups[m.seqLabel]){seqGroups[m.seqLabel]={color:m.seqColor,moves:[]};seqOrder.push(m.seqLabel);} seqGroups[m.seqLabel].moves.push(m); });
+  const total=session.reduce((a,m)=>a+m.duration,0);
+  const rows=seqOrder.map(label=>{
+    const {color,moves}=seqGroups[label];
+    return `<tr><td colspan="3" style="padding:10px 0 5px;font-weight:900;font-size:13px;color:${color};text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid #eee;font-family:sans-serif;">${label}</td></tr>`+
+    moves.map((m,i)=>`<tr><td style="padding:7px 0 7px 10px;border-bottom:1px solid #f0f0f0;font-size:13px;">${i+1}. ${m.name}</td><td style="padding:7px;border-bottom:1px solid #f0f0f0;font-size:12px;color:#777;">${m.muscles}</td><td style="padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:12px;color:#777;text-align:right;">${m.duration} min</td></tr>`).join("");
+  }).join("");
+  const w=window.open("","_blank");
+  w.document.write(`<!DOCTYPE html><html><head><title>${name}</title>
+  <style>body{font-family:-apple-system,sans-serif;max-width:680px;margin:40px auto;color:#111;padding:0 20px;}
+  h1{font-size:26px;font-weight:900;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+  .meta{color:#888;font-size:13px;margin-bottom:28px;}
+  table{width:100%;border-collapse:collapse;}
+  .footer{margin-top:24px;padding-top:14px;border-top:2px solid #111;font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;}
+  @media print{@page{margin:1.5cm}}</style></head><body>
+  <h1>${name}</h1>
+  <div class="meta">${typeName(classFilter)} &nbsp;·&nbsp; ${session.length} moves &nbsp;·&nbsp; ${total} minutes &nbsp;·&nbsp; ${new Date().toLocaleDateString("en-AU",{day:"numeric",month:"long",year:"numeric"})}</div>
+  <table>${rows}</table>
+  <div class="footer">Studio Planner &nbsp;·&nbsp; ${total} min total &nbsp;·&nbsp; ${seqOrder.length} sequences</div>
+  <script>window.onload=()=>window.print();<\/script></body></html>`);
+  w.document.close();
+}
+
+function renderLibrary(){
+  const seqs=CLASS_SEQS[libFilter];
+  document.getElementById("lib-list").innerHTML=seqs.map(seq=>{
+    const moves=library[libFilter][seq.id]||[];
+    const isOpen=openLibSeqs[seq.id];
+    return `<div class="seq-block">
+      <div class="seq-head" onclick="toggleLibSeq('${seq.id}')">
+        <div class="seq-dot" style="background:${seq.color}"></div>
+        <div class="seq-info"><div class="seq-name">${seq.label}</div></div>
+        <div class="seq-count">${moves.length} moves</div>
+        <svg class="seq-chevron${isOpen?" open":""}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="seq-body${isOpen?" open":""}">
+        ${moves.map(m=>`<div class="move-row">
+          <div class="move-info"><div class="move-name">${m.name}</div><div class="move-muscle">${m.muscles} · ${m.intensity}</div></div>
+          <div class="move-dur">${m.duration}m</div>
+        </div>`).join("")}
+        ${!moves.length?`<div style="padding:14px 16px;font-size:13px;color:var(--light);">No moves yet.</div>`:""}
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function toggleLibSeq(id){ openLibSeqs[id]=!openLibSeqs[id]; renderLibrary(); }
+
+function populateSeqSel(){
+  const ct=document.getElementById("fm-class").value||libFilter;
+  document.getElementById("fm-seq").innerHTML=CLASS_SEQS[ct].map(s=>`<option value="${s.id}">${s.label}</option>`).join("");
+}
+
+function addCustomMove(){
+  const name=document.getElementById("fm-name").value.trim();
+  const ct=document.getElementById("fm-class").value;
+  const seqId=document.getElementById("fm-seq").value;
+  const muscles=document.getElementById("fm-muscles").value.trim()||"General";
+  const dur=parseInt(document.getElementById("fm-dur").value)||3;
+  const intensity=document.getElementById("fm-intensity").value;
+  if(!name){toast("Enter a move name");return;}
+  if(!library[ct][seqId])library[ct][seqId]=[];
+  library[ct][seqId].push({id:Date.now(),name,duration:dur,muscles,intensity});
+  saveLib();
+  document.getElementById("fm-name").value="";
+  document.getElementById("fm-muscles").value="";
+  document.getElementById("fm-dur").value="";
+  renderLibrary();
+  toast(name+" added!");
+}
+
+function renderCatalogue(){
+  const ip=document.getElementById("insights-section");
+  const cl=document.getElementById("cat-list");
+  if(!catalogue.length){
+    ip.innerHTML="";
+    cl.innerHTML=`<div class="empty-state"><div class="empty-text">No sessions yet</div><div class="empty-sub">Save your first session to start the catalogue</div></div>`;
+    return;
+  }
+  const mc={},tc={};
+  catalogue.forEach(s=>{ tc[s.type]=(tc[s.type]||0)+1; s.moves.forEach(m=>mc[m.name]=(mc[m.name]||0)+1); });
+  const topMoves=Object.entries(mc).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const totalMin=catalogue.reduce((a,s)=>a+s.duration,0);
+  ip.innerHTML=`
+    <div class="insight-grid">
+      <div class="insight-card yellow"><div class="insight-title">Sessions</div><div class="insight-val">${catalogue.length}</div><div class="insight-sub">saved total</div></div>
+      <div class="insight-card black"><div class="insight-title">Minutes</div><div class="insight-val">${totalMin}</div><div class="insight-sub">taught total</div></div>
+    </div>
+    <div class="insight-card" style="margin-bottom:10px;">
+      <div class="insight-title">Class breakdown</div>
+      ${Object.entries(tc).map(([t,c])=>`<div class="insight-row"><span>${typeName(t)}</span><span class="insight-row-val">${c} session${c>1?"s":""}</span></div>`).join("")}
+    </div>
+    ${topMoves.length?`<div class="insight-card" style="margin-bottom:16px;"><div class="insight-title">Most used moves</div>${topMoves.map(([n,c])=>`<div class="insight-row"><span>${n}</span><span class="insight-row-val">x${c}</span></div>`).join("")}</div>`:""}
+  `;
+  cl.innerHTML=catalogue.map(s=>`<div class="cat-item">
+    <div class="cat-title">${s.name}</div>
+    <div class="cat-meta">
+      <span class="cat-type type-${s.type}">${typeName(s.type)}</span>
+      <span>${s.moves.length} moves</span>
+      <span>${s.duration} min</span>
+      <span>${s.date}</span>
+    </div>
+    <div class="cat-seqs">${Object.keys(s.seqGroups||{}).map(l=>`<span class="cat-seq-tag">${l}</span>`).join("")}</div>
+  </div>`).join("");
+}
+
+// Init
+populateSeqSel();
+document.getElementById("fm-class").addEventListener("change",populateSeqSel);
+const badge=document.getElementById("header-badge");
+badge.style.background="var(--burn-bg)";
+badge.style.color="var(--burn)";
+badge.style.border="2px solid var(--burn)";
+renderSeqList();
+</script>
+</body></html>
